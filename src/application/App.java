@@ -1,6 +1,8 @@
 package application;
 
 import model.entities.Contract;
+import model.service.ContractService;
+import model.service.PaypalService;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -21,8 +23,17 @@ public class App {
         double value = sc.nextDouble();
 
         Contract c = new Contract(number, date, value);
-        System.out.println(c.getNumber());
-        System.out.println(c.getDate());
+
+        System.out.print("Entre com o numero de parcelas: ");
+        int numberOfInstallments = sc.nextInt();
+        ContractService contractService = new ContractService(new PaypalService());
+        contractService.processContract(c, numberOfInstallments);
+
+        System.out.println("Parcelas");
+        for (var installment : c.getInstallments()) {
+            System.out.println(installment);
+        }
+
         sc.close();
     }
 }
